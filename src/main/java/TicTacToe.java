@@ -15,108 +15,120 @@ public class TicTacToe {
         // Spielfeld erstellen
         board = new Board();
 
-        // X beginnt
+        // X beginnt immer
         currentPlayer = player1;
     }
 
     public void start() {
         Scanner scanner = new Scanner(System.in);
 
-        // Variable, um sich zu merken, ob jemand gewonnen hat
-        boolean isGameOver = false;
+        // Diese äußere Schleife macht es möglich, mehrere Runden zu spielen
+        while (true) {
 
-        // läuft bis das Spielfeld voll ist ODER jemand gewonnen hat
-        while (!board.isFull()) {
+            // Spielfeld und Spieler zurücksetzen für eine neue Runde
+            board.clear();
+            currentPlayer = player1;
 
-            System.out.println("Current Player: " + currentPlayer.getMarker());
+            boolean isGameOver = false;
 
-            // Spielfeld anzeigen
-            board.print();
+            // läuft bis das Spielfeld voll ist ODER jemand gewonnen hat
+            while (!board.isFull()) {
 
-            int row;
-            int col;
+                System.out.println("Current Player: " + currentPlayer.getMarker());
 
-            // Spieler soll ein leeres Feld auswählen können
-            while (true) {
-                System.out.print("row (0-2): ");
-                row = scanner.nextInt();
+                // Spielfeld anzeigen
+                board.print();
 
-                System.out.print("column (0-2): ");
-                col = scanner.nextInt();
+                int row;
+                int col;
 
-                // prüfen ob Feld gültig und leer ist
-                if (row >= 0 && row < 3 &&
-                        col >= 0 && col < 3 &&
-                        board.isCellEmpty(row, col)) {
-                    break;
-                } else {
-                    System.out.println("Invalid move. Try again.\n");
+                // Spieler soll ein leeres Feld auswählen können
+                while (true) {
+                    System.out.print("row (0-2): ");
+                    row = scanner.nextInt();
+
+                    System.out.print("column (0-2): ");
+                    col = scanner.nextInt();
+
+                    // prüfen ob Feld gültig und leer ist
+                    if (row >= 0 && row < 3 &&
+                            col >= 0 && col < 3 &&
+                            board.isCellEmpty(row, col)) {
+                        break;
+                    } else {
+                        System.out.println("Invalid move. Try again.\n");
+                    }
                 }
+
+                // Symbol setzen
+                board.place(row, col, currentPlayer.getMarker());
+
+                // prüfen ob dieser Zug gewonnen hat
+                if (hasWinner()) {
+                    isGameOver = true;
+                    break;
+                }
+
+                // Spieler wechseln
+                switchCurrentPlayer();
             }
 
-            // Symbol setzen
-            board.place(row, col, currentPlayer.getMarker());
+            // finales Spielfeld anzeigen
+            board.print();
 
-            // Sofort nachdem ein Symbol gesetzt wurde, prüfen wir,
-            // ob dieser Zug zum Sieg geführt hat. Wir verwenden die NEUE Methode.
-            if (hasWinner()) {
-                isGameOver = true; // Wir haben einen Gewinner!
+            // Spielende-Nachricht ausgeben
+            if (isGameOver) {
+                System.out.println("Game Over! Player " + currentPlayer.getMarker() + " has won!");
+            } else {
+                System.out.println("Game Over! It's a draw.");
+            }
+
+            // Spieler fragen ob sie nochmal spielen wollen
+            System.out.print("Do you want to play again? (yes/no): ");
+            String answer = scanner.next().trim().toLowerCase();
+
+            // wenn nicht "yes" dann Spiel beenden
+            if (!answer.equals("yes")) {
+                System.out.println("Thanks for playing! Goodbye.");
                 break;
             }
 
-            // Spieler wechseln
-            switchCurrentPlayer();
+            // sonst geht die äußere Schleife nochmal von vorne los
+            System.out.println("\nStarting a new game!\n");
         }
-
-        // finales Spielfeld anzeigen
-        board.print();
-
-
-        // Spielende-Nachricht ausgeben (Sieg oder Unentschieden)
-        if (isGameOver) {
-            // Wenn die Schleife durch einen Sieg abgebrochen wurde:
-            System.out.println("Game Over! Player " + currentPlayer.getMarker() + " has won!");
-        } else {
-            // Wenn die Schleife normal zu Ende ging (Feld ist voll):
-            System.out.println("Game Over! It's a draw.");
-        }
-
 
         scanner.close();
     }
 
     private boolean hasWinner() {
-        char marker = currentPlayer.getMarker(); // Das Symbol des Spielers, der gerade dran war
+        char marker = currentPlayer.getMarker();
 
-        // 1. Horizontale Reihen prüfen (3 Reihen)
-        // Wir benutzen nun board.getCell(row, col)
+        // horizontale Reihen prüfen
         for (int i = 0; i < 3; i++) {
             if (board.getCell(i, 0) == marker && board.getCell(i, 1) == marker && board.getCell(i, 2) == marker) {
                 return true;
             }
         }
 
-        // 2. Vertikale Spalten prüfen (3 Spalten)
+        // vertikale Spalten prüfen
         for (int j = 0; j < 3; j++) {
             if (board.getCell(0, j) == marker && board.getCell(1, j) == marker && board.getCell(2, j) == marker) {
                 return true;
             }
         }
 
-        // 3. Diagonale (von links oben nach rechts unten) prüfen
+        // Diagonale links oben nach rechts unten
         if (board.getCell(0, 0) == marker && board.getCell(1, 1) == marker && board.getCell(2, 2) == marker) {
             return true;
         }
 
-        // 4. Diagonale (von rechts oben nach links unten) prüfen
+        // Diagonale rechts oben nach links unten
         if (board.getCell(0, 2) == marker && board.getCell(1, 1) == marker && board.getCell(2, 0) == marker) {
             return true;
         }
 
-        // Wenn nichts zutrifft, hat der Spieler noch nicht gewonnen
         return false;
     }
-    // -----------
 
     private void switchCurrentPlayer() {
         // zwischen X und O wechseln
