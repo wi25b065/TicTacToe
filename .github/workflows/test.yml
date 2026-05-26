@@ -22,12 +22,5 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # If you are using Maven:
       - name: Run Tests (Maven)
-        run: mvn test
-
-      # --- OR --- 
-      # If you are NOT using Maven/Gradle and just have raw .java files, 
-      # delete the Maven step above and use this instead to check compilation:
-      # - name: Compile Java files
-      #   run: javac *.java
+        run: mvn clean test
