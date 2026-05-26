@@ -4,8 +4,8 @@ public class TicTacToe {
 
     private Player player1;
     private Player player2;
-    private Player currentPlayer;
-    private Board board;
+    Player currentPlayer;
+    Board board;
 
     public TicTacToe() {
         // Spieler erstellen
@@ -100,7 +100,7 @@ public class TicTacToe {
         scanner.close();
     }
 
-    private boolean hasWinner() {
+    boolean hasWinner() {
         char marker = currentPlayer.getMarker();
 
         // horizontale Reihen prüfen
@@ -130,7 +130,7 @@ public class TicTacToe {
         return false;
     }
 
-    private void switchCurrentPlayer() {
+    void switchCurrentPlayer() {
         // zwischen X und O wechseln
         if (currentPlayer == player1) {
             currentPlayer = player2;

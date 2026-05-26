@@ -18,4 +18,12 @@ public class PlayerTest {
         Player player = new Player('O');
         assertEquals('O', player.getMarker());
     }
+
+    @Test
+    void getMarker_shouldNotReturnWrongMarker() {
+        Player player = new Player('X');
+        assertNotEquals('O', player.getMarker());
+    }
+
 }
+
