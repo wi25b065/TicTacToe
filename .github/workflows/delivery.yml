@@ -25,7 +25,7 @@ jobs:
 
       # Lädt die fertige JAR-Datei hoch
       - name: Upload JAR Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: tictactoe-app
           path: target/*.jar
