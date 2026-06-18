@@ -12,6 +12,21 @@ public class BoardTest {
         board = new Board();
     }
 
+    @Test
+    void print_shouldNotThrowException() {
+        assertDoesNotThrow(() -> board.print());
+    }
+
+    @Test
+    void print_shouldNotThrowException_whenBoardIsFull() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                board.place(i, j, 'X');
+            }
+        }
+        assertDoesNotThrow(() -> board.print());
+    }
+    
     // --- isCellEmpty ---
 
     @Test
